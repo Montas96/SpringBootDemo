@@ -3,12 +3,14 @@ package com.umbrella.demoSpringBoot.Service.impl;
 import com.umbrella.demoSpringBoot.Controller.Exception.UserNotFoundException;
 import com.umbrella.demoSpringBoot.Domain.User;
 import com.umbrella.demoSpringBoot.Repository.UserRepository;
+import com.umbrella.demoSpringBoot.Security.UserDetailsServiceImpl;
 import com.umbrella.demoSpringBoot.Service.UserService;
 import com.umbrella.demoSpringBoot.Service.dto.UserDTO;
 import com.umbrella.demoSpringBoot.Service.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -59,5 +61,15 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
         user.setActivated(status);
         userRepository.save(user);
+    }
+
+    @Override
+    public Optional<UserDTO> getUserWithAuthorities() {
+
+        Optional<User> optionalUser = UserDetailsServiceImpl.getCurrentUserLogin().flatMap(userRepository::findByUsername);
+        if(optionalUser.isPresent()){
+            return Optional.of(userMapper.toDto(optionalUser.get()));
+        }
+        return Optional.empty();
     }
 }

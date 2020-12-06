@@ -4,7 +4,7 @@ import com.umbrella.demoSpringBoot.Domain.User;
 import com.umbrella.demoSpringBoot.Service.dto.UserDTO;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+//@Mapper(componentModel = "spring")
 public interface UserMapper extends GenericMapper<User, UserDTO> {
 
     default User fromId(String id) {

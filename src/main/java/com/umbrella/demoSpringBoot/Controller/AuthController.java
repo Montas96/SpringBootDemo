@@ -1,5 +1,6 @@
 package com.umbrella.demoSpringBoot.Controller;
 
+import com.umbrella.demoSpringBoot.Controller.Exception.UserNotFoundException;
 import com.umbrella.demoSpringBoot.Domain.ERole;
 import com.umbrella.demoSpringBoot.Domain.Role;
 import com.umbrella.demoSpringBoot.Domain.User;
@@ -10,6 +11,8 @@ import com.umbrella.demoSpringBoot.Security.UserDetailsImpl;
 import com.umbrella.demoSpringBoot.Security.payloads.JwtResponse;
 import com.umbrella.demoSpringBoot.Security.payloads.LoginRequest;
 import com.umbrella.demoSpringBoot.Security.payloads.SignupRequest;
+import com.umbrella.demoSpringBoot.Service.UserService;
+import com.umbrella.demoSpringBoot.Service.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -44,12 +48,14 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
@@ -57,32 +63,28 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                roles));
+        return ResponseEntity.ok(new JwtResponse(jwt));
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/signUp")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new String("Error: Username is already taken!"));
+                    .body("Error: Username is already taken!");
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new String("Error: Email is already in use!"));
+                    .body("Error: Email is already in use!");
         }
-
         // Create new user's account
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
+        user.setActivated(true);
+        user.setCreationDate(LocalDateTime.now());
 
         List<String> strRoles = new ArrayList<>(signUpRequest.getRoles());
         List<Role> roles = new ArrayList<>();
@@ -113,10 +115,14 @@ public class AuthController {
                 }
             });
         }
-
         user.setRoles(new HashSet<>(roles));
         userRepository.save(user);
+        return ResponseEntity.ok("User registered successfully!");
+    }
 
-        return ResponseEntity.ok(new String("User registered successfully!"));
+    @GetMapping("/account")
+    public UserDTO getAccount() {
+        return userService.getUserWithAuthorities()
+                .orElseThrow(() -> new UserNotFoundException());
     }
 }
