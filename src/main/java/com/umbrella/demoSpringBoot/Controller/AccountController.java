@@ -1,5 +1,6 @@
-package com.umbrella.demoSpringBoot.Controller.Exception;
+package com.umbrella.demoSpringBoot.Controller;
 
+import com.umbrella.demoSpringBoot.Controller.Exception.UserNotFoundException;
 import com.umbrella.demoSpringBoot.Service.UserService;
 import com.umbrella.demoSpringBoot.Service.dto.UserDTO;
 import org.springframework.web.bind.annotation.GetMapping;
