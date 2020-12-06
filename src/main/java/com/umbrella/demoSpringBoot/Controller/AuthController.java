@@ -120,9 +120,5 @@ public class AuthController {
         return ResponseEntity.ok("User registered successfully!");
     }
 
-    @GetMapping("/account")
-    public UserDTO getAccount() {
-        return userService.getUserWithAuthorities()
-                .orElseThrow(() -> new UserNotFoundException());
-    }
+
 }
