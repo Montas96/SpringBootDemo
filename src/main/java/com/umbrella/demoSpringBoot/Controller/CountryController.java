@@ -33,7 +33,7 @@ public class CountryController {
         return ResponseEntity.ok(countries);
     }
 
-    @GetMapping("/countries")
+    @GetMapping("/countries/all")
     public ResponseEntity<List<CountryDTO>> getAllCountries(){
             List<CountryDTO> countries = countryService.getAllCountries();
             return ResponseEntity.ok(countries);

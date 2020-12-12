@@ -9,7 +9,7 @@ public class CountryDTO implements Serializable {
     private String id;
 
     @NotEmpty(message = "Country code  may not be empty")
-    private String code;
+    private String isoCode;
 
     @NotEmpty(message = "Country name  may not be empty")
     private String name;
@@ -22,12 +22,12 @@ public class CountryDTO implements Serializable {
         this.id = id;
     }
 
-    public String getCode() {
-        return code;
+    public String getIsoCode() {
+        return isoCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setIsoCode(String isoCode) {
+        this.isoCode = isoCode;
     }
 
     public String getName() {
