@@ -26,6 +26,7 @@ public class UserDTO implements Serializable {
     private LocalDateTime modificationDate;
     private String phoneNumber;
     private boolean activated;
+    private AddressDTO address;
 
     public String getId() {
         return id;
@@ -105,5 +106,13 @@ public class UserDTO implements Serializable {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public AddressDTO getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressDTO address) {
+        this.address = address;
     }
 }

@@ -3,6 +3,7 @@ package com.umbrella.demoSpringBoot.Domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -20,42 +21,57 @@ public class User implements Serializable {
 
     @NotBlank
     @Size(max = 20)
+    @Field("username")
     private String username;
 
     @NotBlank
     @Size(max = 50)
     @Email
+    @Field("email")
     private String email;
 
     @NotBlank
     @NotNull
+    @Field("firstName")
     private String firstName;
 
     @NotBlank
     @NotNull
+    @Field("lastName")
     private String lastName;
 
     @NotBlank
     @NotNull
+    @Field("phoneNumber")
     private String phoneNumber;
 
     @NotBlank
-    @Size(max = 120)
+    @Field("password")
     private String password;
 
+    @Field("restKey")
     private String restKey;
 
-    private LocalDateTime CreationDate;
+    @Field("creationDate")
+    private LocalDateTime creationDate;
 
+    @Field("modificationDate")
     private LocalDateTime modificationDate;
 
     @DBRef
+    @Field("createdBy")
     private User createdBy;
 
     @DBRef
+    @Field("roles")
     private Set<Role> roles = new HashSet<>();
 
+    @Field("activated")
     private boolean activated;
+
+    @Field("address")
+    @DBRef
+    private Address address;
 
     public User() {
     }
@@ -139,11 +155,11 @@ public class User implements Serializable {
     }
 
     public LocalDateTime getCreationDate() {
-        return CreationDate;
+        return creationDate;
     }
 
     public void setCreationDate(LocalDateTime creationDate) {
-        CreationDate = creationDate;
+        this.creationDate = creationDate;
     }
 
     public LocalDateTime getModificationDate() {
@@ -168,5 +184,13 @@ public class User implements Serializable {
 
     public void setActivated(boolean activated) {
         this.activated = activated;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }

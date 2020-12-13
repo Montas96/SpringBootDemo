@@ -2,7 +2,9 @@ package com.umbrella.demoSpringBoot.Service.mapper.impl;
 
 import com.umbrella.demoSpringBoot.Domain.User;
 import com.umbrella.demoSpringBoot.Service.dto.UserDTO;
+import com.umbrella.demoSpringBoot.Service.mapper.AddressMapper;
 import com.umbrella.demoSpringBoot.Service.mapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -11,6 +13,9 @@ import java.util.List;
 
 @Component
 public class UserMapperImp implements UserMapper {
+
+    @Autowired
+    private AddressMapper addressMapper;
 
     @Override
     public User toEntity(UserDTO dto) {
@@ -28,6 +33,7 @@ public class UserMapperImp implements UserMapper {
         user.setEmail(dto.getEmail());
         user.setRoles(dto.getRoles());
         user.setPhoneNumber(dto.getPhoneNumber());
+        user.setAddress(addressMapper.toEntity(dto.getAddress()));
         return user;
     }
 
@@ -47,6 +53,7 @@ public class UserMapperImp implements UserMapper {
         userDTO.setEmail(user.getEmail());
         userDTO.setRoles(user.getRoles());
         userDTO.setPhoneNumber(user.getPhoneNumber());
+        userDTO.setAddress(addressMapper.toDto(user.getAddress()));
         return userDTO;
     }
 

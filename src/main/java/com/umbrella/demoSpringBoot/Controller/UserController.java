@@ -1,8 +1,11 @@
 package com.umbrella.demoSpringBoot.Controller;
 
+import com.umbrella.demoSpringBoot.Domain.pojo.DatePeriod;
 import com.umbrella.demoSpringBoot.Service.UserService;
 import com.umbrella.demoSpringBoot.Service.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +35,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
 
+    @GetMapping("users")
+    public ResponseEntity<Page<UserDTO>> getAllUsers(Pageable pageable) {
+        Page<UserDTO> page = userService.getAllUsers(pageable);
+        return ResponseEntity.ok(page);
+    }
+
     @RequestMapping(value = "users/{id}", method = RequestMethod.PUT)
     public ResponseEntity<UserDTO> updateUser(@PathVariable String id) {
         if (StringUtils.hasText(id)) {
@@ -47,5 +56,10 @@ public class UserController {
         }
         userService.deleteUserById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("users-by-period")
+    public Page<UserDTO> findUserByPeriod(@RequestBody DatePeriod datePeriod, Pageable pageable) {
+        return userService.findUserByPeriod(datePeriod.getFromDate(), datePeriod.getToDate(), pageable);
     }
 }
