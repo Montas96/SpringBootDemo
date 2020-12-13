@@ -41,12 +41,12 @@ public class MediaTypeServiceImpl implements MediaTypeService {
     }
 
     @Override
-    public Optional<MediaTypeDTO> getOneById(String id) {
+    public MediaTypeDTO getOneById(String id) {
         Optional<MediaType> optionalMediaType = mediaTypeRepository.findById(id);
         if (!optionalMediaType.isPresent()) {
             throw new MediaTypeExceptionNotFound();
         }
-        return Optional.of(mediaTypeMapper.toDto(optionalMediaType.get()));
+        return mediaTypeMapper.toDto(optionalMediaType.get());
     }
 
     @Override

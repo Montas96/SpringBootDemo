@@ -9,5 +9,5 @@ public interface GenericMapper<E,D> {
 
     List<E> toEntity(List<D> dtoList);
 
-    List <D> toDto(List<E> entityList);
+    List<D> toDto(List<E> entityList);
 }

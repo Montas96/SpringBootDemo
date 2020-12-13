@@ -11,7 +11,7 @@ public interface MediaTypeService {
 
     MediaTypeDTO update(MediaTypeDTO mediaTypeDTO);
 
-    Optional<MediaTypeDTO> getOneById(String id);
+    MediaTypeDTO getOneById(String id);
 
     List<MediaTypeDTO> getAll();
 
