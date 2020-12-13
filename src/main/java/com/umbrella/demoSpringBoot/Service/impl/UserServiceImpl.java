@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO createUser(UserDTO userDTO) {
+    public UserDTO create(UserDTO userDTO) {
         User user = userMapper.toEntity(userDTO);
         user = userRepository.save(user);
         userDTO.setId(user.getId());
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(UserDTO userDTO) {
+    public UserDTO update(UserDTO userDTO) {
         User user = userRepository.findById(userDTO.getId()).orElseThrow(() -> new UserNotFoundException());
         user.setUsername(userDTO.getUserName());
         user.setEmail(userDTO.getEmail());

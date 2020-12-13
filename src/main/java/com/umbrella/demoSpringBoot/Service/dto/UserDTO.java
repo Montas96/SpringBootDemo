@@ -27,6 +27,7 @@ public class UserDTO implements Serializable {
     private String phoneNumber;
     private boolean activated;
     private AddressDTO address;
+    private MediaDTO profileMedia;
 
     public String getId() {
         return id;
@@ -114,5 +115,13 @@ public class UserDTO implements Serializable {
 
     public void setAddress(AddressDTO address) {
         this.address = address;
+    }
+
+    public MediaDTO getProfileMedia() {
+        return profileMedia;
+    }
+
+    public void setProfileMedia(MediaDTO profileMedia) {
+        this.profileMedia = profileMedia;
     }
 }

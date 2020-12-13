@@ -8,9 +8,9 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 public interface UserService {
-    UserDTO createUser(UserDTO user);
+    UserDTO create(UserDTO user);
 
-    UserDTO updateUser(UserDTO user);
+    UserDTO update(UserDTO user);
 
     UserDTO getUserById(String id);
 

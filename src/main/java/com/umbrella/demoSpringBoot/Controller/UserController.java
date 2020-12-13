@@ -23,7 +23,7 @@ public class UserController {
         if (!StringUtils.hasText(userDTO.getId())) {
             throw new RuntimeException();
         }
-        UserDTO user = userService.createUser(userDTO);
+        UserDTO user = userService.create(userDTO);
         return ResponseEntity.ok().body(user);
     }
 

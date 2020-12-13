@@ -73,6 +73,10 @@ public class User implements Serializable {
     @DBRef
     private Address address;
 
+    @DBRef
+    @Field("profileMedia")
+    private Media profileMedia;
+
     public User() {
     }
 
@@ -192,5 +196,13 @@ public class User implements Serializable {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public Media getProfileMedia() {
+        return profileMedia;
+    }
+
+    public void setProfileMedia(Media profileMedia) {
+        this.profileMedia = profileMedia;
     }
 }
