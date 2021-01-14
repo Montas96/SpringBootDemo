@@ -3,14 +3,18 @@ package com.umbrella.demoSpringBoot.Controller;
 import com.umbrella.demoSpringBoot.Controller.Exception.IdNotFoundException;
 import com.umbrella.demoSpringBoot.Service.CityService;
 import com.umbrella.demoSpringBoot.Service.dto.CityDTO;
+import com.umbrella.demoSpringBoot.Utils.PaginationUtils;
+import io.jsonwebtoken.Header;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
@@ -25,9 +29,10 @@ public class CityController {
     }
 
     @GetMapping("/cities")
-    public ResponseEntity<Page<CityDTO>> getAllCities(Pageable pageable) {
+    public ResponseEntity<List<CityDTO>> getAllCities(Pageable pageable) {
         Page<CityDTO> cities = cityService.getAllCities(pageable);
-        return ResponseEntity.ok(cities);
+        HttpHeaders responseHeaders = PaginationUtils.generatePaginationHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),cities);
+        return ResponseEntity.ok().headers(responseHeaders).body(cities.getContent());
     }
 
     @GetMapping("/cities/{id}")

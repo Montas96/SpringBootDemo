@@ -19,7 +19,7 @@ public class MediaTypeController {
     }
 
     @PostMapping("/mediaTypes")
-    public ResponseEntity<MediaTypeDTO> create(MediaTypeDTO mediaTypeDTO) {
+    public ResponseEntity<MediaTypeDTO> create(@RequestBody  MediaTypeDTO mediaTypeDTO) {
         if (StringUtils.hasText(mediaTypeDTO.getId())) {
             throw new RuntimeException("mediaType can not have id for creation");
         }
@@ -28,7 +28,7 @@ public class MediaTypeController {
     }
 
     @PutMapping("/mediaTypes")
-    public ResponseEntity<MediaTypeDTO> update(MediaTypeDTO mediaTypeDTO) {
+    public ResponseEntity<MediaTypeDTO> update(@RequestBody MediaTypeDTO mediaTypeDTO) {
         if (!StringUtils.hasText(mediaTypeDTO.getId())) {
             throw new RuntimeException("mediaType must have an id for modification");
         }

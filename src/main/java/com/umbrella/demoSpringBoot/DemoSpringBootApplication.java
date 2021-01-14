@@ -28,12 +28,14 @@ public class DemoSpringBootApplication {
 			role.setName(ERole.ROLE_USER);
 			roleRepository.save(role);
 
-			role.setId("ROLE_USER");
-			role.setName(ERole.ROLE_USER);
+			role = new Role();
+			role.setId("ROLE_MODERATOR");
+			role.setName(ERole.ROLE_MODERATOR);
 			roleRepository.save(role);
 
-			role.setId("ROLE_USER");
-			role.setName(ERole.ROLE_USER);
+			role = new Role();
+			role.setId("ROLE_ADMIN");
+			role.setName(ERole.ROLE_ADMIN);
 			roleRepository.save(role);
 
 		};

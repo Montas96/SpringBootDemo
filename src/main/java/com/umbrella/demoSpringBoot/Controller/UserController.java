@@ -3,12 +3,17 @@ package com.umbrella.demoSpringBoot.Controller;
 import com.umbrella.demoSpringBoot.Domain.pojo.DatePeriod;
 import com.umbrella.demoSpringBoot.Service.UserService;
 import com.umbrella.demoSpringBoot.Service.dto.UserDTO;
+import com.umbrella.demoSpringBoot.Utils.PaginationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/")
@@ -36,9 +41,10 @@ public class UserController {
     }
 
     @GetMapping("users")
-    public ResponseEntity<Page<UserDTO>> getAllUsers(Pageable pageable) {
+    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
         Page<UserDTO> page = userService.getAllUsers(pageable);
-        return ResponseEntity.ok(page);
+        HttpHeaders responseHeaders = PaginationUtils.generatePaginationHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(responseHeaders).body(page.getContent());
     }
 
     @RequestMapping(value = "users/{id}", method = RequestMethod.PUT)
@@ -59,7 +65,9 @@ public class UserController {
     }
 
     @PostMapping("users-by-period")
-    public Page<UserDTO> findUserByPeriod(@RequestBody DatePeriod datePeriod, Pageable pageable) {
-        return userService.findUserByPeriod(datePeriod.getFromDate(), datePeriod.getToDate(), pageable);
+    public ResponseEntity<List<UserDTO>> findUserByPeriod(@RequestBody DatePeriod datePeriod, Pageable pageable) {
+        Page<UserDTO> page = userService.findUserByPeriod(datePeriod.getFromDate(), datePeriod.getToDate(), pageable);
+        HttpHeaders responseHeaders = PaginationUtils.generatePaginationHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(responseHeaders).body(page.getContent());
     }
 }

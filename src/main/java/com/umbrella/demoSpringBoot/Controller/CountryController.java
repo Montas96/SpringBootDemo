@@ -2,8 +2,10 @@ package com.umbrella.demoSpringBoot.Controller;
 
 import com.umbrella.demoSpringBoot.Service.CountryService;
 import com.umbrella.demoSpringBoot.Service.dto.CountryDTO;
+import com.umbrella.demoSpringBoot.Utils.PaginationUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
@@ -40,8 +43,9 @@ public class CountryController {
     }
 
     @GetMapping("/countries")
-    public ResponseEntity<Page<CountryDTO>> getAllCountries(Pageable pageable){
+    public ResponseEntity<List<CountryDTO>> getAllCountries(Pageable pageable){
         Page<CountryDTO> countries = countryService.getAllCountries(pageable);
-        return ResponseEntity.ok(countries);
+        HttpHeaders responseHeaders = PaginationUtils.generatePaginationHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),countries);
+        return ResponseEntity.ok().headers(responseHeaders).body(countries.getContent());
     }
 }
