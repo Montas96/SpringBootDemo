@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("api/")
+@RequestMapping("api/v1/")
 public class MediaFileController {
 
     private final MediaFileService mediaFileService;
@@ -20,13 +20,15 @@ public class MediaFileController {
     }
 
     @PostMapping("media-upload/{id}")
-    public HttpEntity<byte[]> uploadMedia(@RequestParam("file") MultipartFile file, @PathVariable String id) {
-        return mediaFileService.uploadMedia(file, id);
+    public ResponseEntity<Void> uploadMedia(@RequestParam("file") MultipartFile file, @PathVariable String id) {
+        mediaFileService.uploadMedia(file, id);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("media-upload-encode/{id}")
-    public String uploadEncodedMedia(@RequestBody String data, @PathVariable String id) {
-        return mediaFileService.uploadMediaFromBase64(data, id);
+    public ResponseEntity<Void> uploadEncodedMedia(@RequestBody String data, @PathVariable String id) {
+        mediaFileService.uploadMediaFromBase64(data, id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("media-get-resource/{id}")

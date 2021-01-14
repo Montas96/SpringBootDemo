@@ -12,7 +12,7 @@ public interface FileUtils {
 
     HttpEntity<byte[]> saveFile(MultipartFile file, String id);
 
-    String saveFileFromBase64(String data, String id);
+    void saveFileFromBase64(String data, String id);
 
     InputStreamResource getFileUrl(String id);
 

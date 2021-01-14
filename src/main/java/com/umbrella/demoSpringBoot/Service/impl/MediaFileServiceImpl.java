@@ -3,7 +3,6 @@ package com.umbrella.demoSpringBoot.Service.impl;
 import com.umbrella.demoSpringBoot.Service.MediaFileService;
 import com.umbrella.demoSpringBoot.Utils.FileUtils;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,13 +22,13 @@ public class MediaFileServiceImpl implements MediaFileService {
     }
 
     @Override
-    public HttpEntity<byte[]> uploadMedia(MultipartFile file, String id) {
-        return fileUtils.saveFile(file, id);
+    public void uploadMedia(MultipartFile file, String id) {
+        fileUtils.saveFile(file, id);
     }
 
     @Override
-    public String uploadMediaFromBase64(String data, String id) {
-        return fileUtils.saveFileFromBase64(data, id);
+    public void uploadMediaFromBase64(String data, String id) {
+        fileUtils.saveFileFromBase64(data, id);
     }
 
     @Override

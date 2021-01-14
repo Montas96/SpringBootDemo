@@ -57,7 +57,7 @@ public class SaveFileGridFs implements FileUtils {
     }
 
     @Override
-    public String saveFileFromBase64(String data, String id) {
+    public void saveFileFromBase64(String data, String id) {
         Pattern mime = Pattern.compile("^data:([a-zA-Z0-9]+/[a-zA-Z0-9]+).*,.*");
         String extension = "";
         String imageString = "";
@@ -75,7 +75,6 @@ public class SaveFileGridFs implements FileUtils {
                     DBObject metaData = new BasicDBObject();
                     metaData.put("fileId", id);
                     gridFsTemplate.store(new ByteArrayInputStream(imageByte), id, extension, metaData);
-                    return data;
                 } catch (Exception e) {
                     throw new RuntimeException("Format exception");
                 }
@@ -83,7 +82,6 @@ public class SaveFileGridFs implements FileUtils {
         } else {
             throw new RuntimeException("Format exception");
         }
-        return null;
     }
 
     @Override
