@@ -1,5 +1,6 @@
 package com.umbrella.demoSpringBoot.Service;
 
+import com.umbrella.demoSpringBoot.Domain.Media;
 import com.umbrella.demoSpringBoot.Service.dto.MediaDTO;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,8 @@ public interface MediaService {
     Page<MediaDTO> getAllMediaByTypeId(String typeId, Pageable pageable);
 
     Page<MediaDTO> getAllMedia(Pageable pageable);
+
+    MediaDTO createMediaFromUserId(String userId,String mediaTypeId);
 
 
 

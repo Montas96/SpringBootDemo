@@ -16,6 +16,13 @@ public class MediaType implements Serializable {
     @Field("label")
     private String label;
 
+    public MediaType(String id) {
+        Id = id;
+    }
+
+    public MediaType() {
+    }
+
     public String getId() {
         return Id;
     }

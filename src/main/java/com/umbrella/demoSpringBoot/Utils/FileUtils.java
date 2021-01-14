@@ -1,5 +1,6 @@
 package com.umbrella.demoSpringBoot.Utils;
 
+import com.umbrella.demoSpringBoot.Domain.Media;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,9 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 public interface FileUtils {
 
 
-    HttpEntity<byte[]> saveFile(MultipartFile file, String id);
+    void saveFile(MultipartFile file, Media media);
 
-    void saveFileFromBase64(String data, String id);
+    void saveFileFromBase64(String data, Media media);
 
     InputStreamResource getFileUrl(String id);
 

@@ -16,8 +16,14 @@ public class Media implements Serializable {
     @Field("name")
     private String name;
 
+    @Field("extension")
+    private String extension;
+
     @Field("path")
     private String path;
+
+    @Field("url")
+    private String url;
 
     @Field("description")
     private String description;
@@ -31,6 +37,7 @@ public class Media implements Serializable {
 
     @Field("relatedId")
     private String relatedId;
+
 
     public String getId() {
         return id;
@@ -86,5 +93,21 @@ public class Media implements Serializable {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

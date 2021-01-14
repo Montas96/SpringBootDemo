@@ -13,6 +13,9 @@ public class MediaDTO implements Serializable {
     private String mediaTypeId;
     private String relatedId;
     private List<String> tags = new ArrayList<>();
+    private String url;
+    private String extension;
+
 
     public String getId() {
         return id;
@@ -68,5 +71,21 @@ public class MediaDTO implements Serializable {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
     }
 }
