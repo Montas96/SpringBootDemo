@@ -1,6 +1,8 @@
 package com.umbrella.demoSpringBoot.Service.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MediaDTO implements Serializable {
 
@@ -10,6 +12,7 @@ public class MediaDTO implements Serializable {
     private String Description;
     private String mediaTypeId;
     private String relatedId;
+    private List<String> tags = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -57,5 +60,13 @@ public class MediaDTO implements Serializable {
 
     public void setRelatedId(String relatedId) {
         this.relatedId = relatedId;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 }

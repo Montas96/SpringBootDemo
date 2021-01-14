@@ -5,6 +5,8 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Media implements Serializable {
 
@@ -19,6 +21,9 @@ public class Media implements Serializable {
 
     @Field("description")
     private String description;
+
+    @Field("tags")
+    private List<String> tags = new ArrayList<>();
 
     @DBRef
     @Field("mediaType")
@@ -73,5 +78,13 @@ public class Media implements Serializable {
 
     public void setRelatedId(String relatedId) {
         this.relatedId = relatedId;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 }
