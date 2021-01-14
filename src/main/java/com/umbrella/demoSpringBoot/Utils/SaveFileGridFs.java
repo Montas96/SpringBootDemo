@@ -3,6 +3,7 @@ package com.umbrella.demoSpringBoot.Utils;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.model.GridFSFile;
+import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
@@ -11,11 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.util.Base64;
 import java.util.Optional;
 
@@ -56,49 +55,42 @@ public class SaveFileGridFs implements FileUtils {
 
     @Override
     public InputStreamResource getFileUrl(String id) {
-        try {
-            InputStream inputStream;
-            Optional<GridFSFile> optionalCreated = maybeLoadFile(id);
-            if (optionalCreated.isPresent()) {
-                GridFSFile created = optionalCreated.get();
-                inputStream = gridFsTemplate.getResource(created.getFilename()).getInputStream();
-                return  new InputStreamResource(inputStream);
-            } else {
-                throw new RuntimeException("file not found");
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("file not found");
-        }
+        InputStream inputStream = getFileFromGridFs(id);
+        return new InputStreamResource(inputStream);
     }
 
     @Override
     public byte[] getFileURL(String id) {
+        byte[] data = new byte[0];
+        InputStream inputStream = getFileFromGridFs(id);
         try {
-            byte[] data;
-            Optional<GridFSFile> optionalCreated = maybeLoadFile(id);
-            if (optionalCreated.isPresent()) {
-                GridFSFile created = optionalCreated.get();
-                InputStream inputStream = gridFsTemplate.getResource(created.getFilename()).getInputStream();
-                data = IOUtils.toByteArray(inputStream);
-                return data;
-            } else {
-                throw  new RuntimeException("File not found");
-            }
+            data = IOUtils.toByteArray(inputStream);
         } catch (IOException e) {
-            throw  new RuntimeException("File not found");
+            e.printStackTrace();
         }
+        return data;
     }
 
     @Override
     public String getFileBase64Encoded(String id) {
+        InputStream inputStream = getFileFromGridFs(id);
+        byte[] bytes = new byte[0];
+        try {
+            bytes = IOUtils.toByteArray(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Base64.getEncoder().encodeToString(bytes);
+    }
+
+    private InputStream getFileFromGridFs(String id) {
         try {
             InputStream inputStream;
             Optional<GridFSFile> optionalCreated = maybeLoadFile(id);
             if (optionalCreated.isPresent()) {
                 GridFSFile created = optionalCreated.get();
                 inputStream = gridFsTemplate.getResource(created.getFilename()).getInputStream();
-                byte[] bytes = IOUtils.toByteArray(inputStream);
-                return Base64.getEncoder().encodeToString(bytes);
+                return inputStream;
             } else {
                 throw new RuntimeException("file not found");
             }
@@ -107,7 +99,7 @@ public class SaveFileGridFs implements FileUtils {
         }
     }
 
-    public Optional<GridFSFile> maybeLoadFile(String id) {
+    private Optional<GridFSFile> maybeLoadFile(String id) {
         GridFSFile file = gridFsTemplate.findOne(getFileQuery(id));
         return Optional.ofNullable(file);
     }
