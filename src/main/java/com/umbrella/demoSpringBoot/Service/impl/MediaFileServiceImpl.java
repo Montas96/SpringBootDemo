@@ -28,6 +28,11 @@ public class MediaFileServiceImpl implements MediaFileService {
     }
 
     @Override
+    public String uploadMediaFromBase64(String data, String id) {
+        return fileUtils.saveFileFromBase64(data, id);
+    }
+
+    @Override
     public ResponseEntity<InputStreamResource> getMediaResource(String id) throws IOException {
         InputStreamResource image = fileUtils.getFileUrl(id);
         return ResponseEntity.ok()

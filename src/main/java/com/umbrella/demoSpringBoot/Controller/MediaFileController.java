@@ -24,14 +24,21 @@ public class MediaFileController {
         return mediaFileService.uploadMedia(file, id);
     }
 
+    @PostMapping("media-upload-encode/{id}")
+    public String uploadEncodedMedia(@RequestBody String data, @PathVariable String id) {
+        return mediaFileService.uploadMediaFromBase64(data, id);
+    }
+
     @GetMapping("media-get-resource/{id}")
     public ResponseEntity<InputStreamResource> getMediaResource(@PathVariable String id) throws IOException {
         return mediaFileService.getMediaResource(id);
     }
+
     @GetMapping("media-get-url/{id}")
     public ResponseEntity<byte[]> getMediaURL(@PathVariable String id) {
         return mediaFileService.getMediaFromUrl(id);
     }
+
     @GetMapping("media-get-base64/{id}")
     public ResponseEntity<String> getMediaEncodedBase64(@PathVariable String id) {
         String data = mediaFileService.getMediaEncodedBase64(id);

@@ -13,10 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.springframework.data.mongodb.gridfs.GridFsCriteria.whereFilename;
 import static org.springframework.data.mongodb.gridfs.GridFsCriteria.whereMetaData;
@@ -54,6 +57,36 @@ public class SaveFileGridFs implements FileUtils {
     }
 
     @Override
+    public String saveFileFromBase64(String data, String id) {
+        Pattern mime = Pattern.compile("^data:([a-zA-Z0-9]+/[a-zA-Z0-9]+).*,.*");
+        String extension = "";
+        String imageString = "";
+        String base64ImageString = data;
+        if (base64ImageString != null && base64ImageString.contains("data:image/")) {
+            imageString = base64ImageString.split(",")[1];
+            Matcher matcher = mime.matcher(base64ImageString);
+            if (matcher.find()) {
+                String delimiter = "[/]";
+                extension = matcher.group(1).toLowerCase().split(delimiter)[1];
+                try {
+                    byte[] imageByte = Base64.getDecoder().decode(imageString);
+                    Optional<GridFSFile> existing = maybeLoadFile(id);
+                    existing.ifPresent(gridFSFile -> gridFsTemplate.delete(getFilenameQuery(gridFSFile.getFilename())));
+                    DBObject metaData = new BasicDBObject();
+                    metaData.put("fileId", id);
+                    gridFsTemplate.store(new ByteArrayInputStream(imageByte), id, extension, metaData);
+                    return data;
+                } catch (Exception e) {
+                    throw new RuntimeException("Format exception");
+                }
+            }
+        } else {
+            throw new RuntimeException("Format exception");
+        }
+        return null;
+    }
+
+    @Override
     public InputStreamResource getFileUrl(String id) {
         InputStream inputStream = getFileFromGridFs(id);
         return new InputStreamResource(inputStream);
@@ -82,6 +115,7 @@ public class SaveFileGridFs implements FileUtils {
         }
         return Base64.getEncoder().encodeToString(bytes);
     }
+
 
     private InputStream getFileFromGridFs(String id) {
         try {

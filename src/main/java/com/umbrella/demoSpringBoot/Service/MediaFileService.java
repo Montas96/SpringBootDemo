@@ -11,6 +11,8 @@ public interface MediaFileService {
 
     HttpEntity<byte[]> uploadMedia(MultipartFile file, String id);
 
+    String uploadMediaFromBase64(String data, String id);
+
     ResponseEntity<InputStreamResource> getMediaResource(String id) throws IOException;
 
     ResponseEntity<byte[]> getMediaFromUrl(String id);
