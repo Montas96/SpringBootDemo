@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 import static org.springframework.data.mongodb.gridfs.GridFsCriteria.whereFilename;
 import static org.springframework.data.mongodb.gridfs.GridFsCriteria.whereMetaData;
 
-@Service
+// @Service
 public class SaveFileGridFs implements FileUtils {
 
     private final GridFsTemplate gridFsTemplate;
