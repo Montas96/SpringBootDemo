@@ -1,6 +1,7 @@
-package com.umbrella.demoSpringBoot.Utils;
+package com.umbrella.demoSpringBoot.Utils.fileUtilsImp;
 
 import com.umbrella.demoSpringBoot.Domain.Media;
+import com.umbrella.demoSpringBoot.Utils.FileUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

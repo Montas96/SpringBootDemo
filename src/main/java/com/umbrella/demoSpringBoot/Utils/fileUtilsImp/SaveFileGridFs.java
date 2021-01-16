@@ -1,9 +1,10 @@
-package com.umbrella.demoSpringBoot.Utils;
+package com.umbrella.demoSpringBoot.Utils.fileUtilsImp;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.umbrella.demoSpringBoot.Domain.Media;
+import com.umbrella.demoSpringBoot.Utils.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.mongodb.core.query.Query;
@@ -38,6 +39,7 @@ public class SaveFileGridFs implements FileUtils {
     private static Query getFilenameQuery(String name) {
         return Query.query(whereFilename().is(name));
     }
+
 
     @Override
     public void saveFile(MultipartFile file, Media media) {
