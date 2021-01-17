@@ -2,6 +2,7 @@ package com.umbrella.demoSpringBoot.Utils.fileUtilsImp;
 
 import com.umbrella.demoSpringBoot.Domain.Media;
 import com.umbrella.demoSpringBoot.Utils.FileUtils;
+import io.jsonwebtoken.lang.Arrays;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,9 +26,8 @@ public class SaveFile implements FileUtils {
 
     @Override
     public void saveFile(MultipartFile file, Media media) {
-
         try {
-            String contentType = file.getContentType().replace("image/", "");
+            String contentType = file.getContentType().replace("image/", ".");
             saveImage(file.getBytes(), media.getId(), contentType);
         } catch (IOException e) {
             e.printStackTrace();
@@ -45,7 +45,7 @@ public class SaveFile implements FileUtils {
             Matcher matcher = mime.matcher(base64ImageString);
             if (matcher.find()) {
                 String delimiter = "[/]";
-                extension = matcher.group(1).toLowerCase().split(delimiter)[1];
+                extension = "." + matcher.group(1).toLowerCase().split(delimiter)[1];
                 try {
                     byte[] imageByte = Base64.getDecoder().decode(imageString);
                     saveImage(imageByte, media.getId(), extension);
@@ -60,10 +60,10 @@ public class SaveFile implements FileUtils {
     }
 
     @Override
-    public InputStreamResource getFileUrl(String id) {
+    public InputStreamResource getFileUrl(String mediaPath) {
         try {
-            byte[] data = getImage(id, "png");
-            if (data != null && data.length > 0) {
+            byte[] data = getImage(mediaPath);
+            if (Arrays.length(data) > 0) {
                 return new InputStreamResource(new ByteArrayInputStream(data));
             }
         } catch (IOException e) {
@@ -73,10 +73,12 @@ public class SaveFile implements FileUtils {
     }
 
     @Override
-    public byte[] getFileURL(String id) {
+    public byte[] getFileURL(String mediaPath) {
         try {
-            byte[] data = getImage(id, "png");
-            return data;
+            byte[] data = getImage(mediaPath);
+            if (Arrays.length(data) > 0) {
+                return data;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -84,10 +86,12 @@ public class SaveFile implements FileUtils {
     }
 
     @Override
-    public String getFileBase64Encoded(String id) {
+    public String getFileBase64Encoded(String mediaPath) {
         try {
-            byte[] data = getImage(id, "png");
-            return Base64.getEncoder().encodeToString(data);
+            byte[] data = getImage(mediaPath);
+            if (Arrays.length(data) > 0) {
+                return Base64.getEncoder().encodeToString(data);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -99,7 +103,7 @@ public class SaveFile implements FileUtils {
             ByteArrayInputStream mediaBytesInputStream = new ByteArrayInputStream(image);
             BufferedImage media = ImageIO.read(mediaBytesInputStream);
             mediaBytesInputStream.close();
-            String mediaFilePath = getSingleMediaFilePath(name, extension);
+            String mediaFilePath = getSingleMediaFilePath(name + extension);
             File mediaFile = new File(mediaFilePath);
             Path path1 = Paths.get(PATH);
             if (!path1.toFile().exists()) {
@@ -117,15 +121,15 @@ public class SaveFile implements FileUtils {
     }
 
 
-    private byte[] getImage(String name, String extension) throws IOException {
-        File file = new File(getSingleMediaFilePath(name, extension));
+    private byte[] getImage(String mediaPath) throws IOException {
+        File file = new File(getSingleMediaFilePath(mediaPath));
         if (!file.exists()) {
             return null;
         }
         return org.apache.commons.io.FileUtils.readFileToByteArray(file);
     }
 
-    private String getSingleMediaFilePath(String name, String mediaExtension) {
-        return PATH + name + "." + mediaExtension;
+    private String getSingleMediaFilePath(String mediaPath) {
+        return PATH + mediaPath;
     }
 }

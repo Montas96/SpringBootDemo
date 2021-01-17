@@ -7,8 +7,6 @@ import com.umbrella.demoSpringBoot.Service.dto.MediaDTO;
 import com.umbrella.demoSpringBoot.Service.mapper.MediaMapper;
 import com.umbrella.demoSpringBoot.Utils.FileUtils;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -79,20 +77,15 @@ public class MediaFileServiceImpl implements MediaFileService {
     }
 
     @Override
-    public ResponseEntity<InputStreamResource> getMediaResource(String id) throws IOException {
-        InputStreamResource image = fileUtils.getFileUrl(id);
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(MediaType.IMAGE_PNG_VALUE))
-                .body(image);
+    public InputStreamResource getMediaResource(String mediaPath) throws IOException {
+        InputStreamResource image = fileUtils.getFileUrl(mediaPath);
+        return image;
     }
 
     @Override
-    public ResponseEntity<byte[]> getMediaFromUrl(String id) {
+    public byte[] getMediaFromUrl(String id) {
         byte[] image = fileUtils.getFileURL(id);
-        return ResponseEntity.ok()
-                .contentLength(image.length)
-                .contentType(MediaType.parseMediaType(MediaType.IMAGE_PNG_VALUE))
-                .body(image);
+        return image;
     }
 
     @Override

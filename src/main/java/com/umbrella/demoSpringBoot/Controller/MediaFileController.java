@@ -4,6 +4,7 @@ import com.umbrella.demoSpringBoot.Service.MediaFileService;
 import com.umbrella.demoSpringBoot.Service.MediaService;
 import com.umbrella.demoSpringBoot.Service.dto.MediaDTO;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,9 @@ public class MediaFileController {
         this.mediaService = mediaService;
     }
 
+    /**
+     * upload image and save media
+     */
     @PostMapping("media-upload/{id}")
     public ResponseEntity<MediaDTO> uploadMedia(@RequestParam("file") MultipartFile file,
                                                 @PathVariable String id,
@@ -37,6 +41,9 @@ public class MediaFileController {
         return ResponseEntity.ok().body(mediaDTO);
     }
 
+    /**
+     * upload image from encoded base64 String and save media
+     */
     @PostMapping("media-upload-encode/{id}")
     public ResponseEntity<Void> uploadEncodedMedia(@RequestBody String data, @PathVariable String id) {
         MediaDTO mediaDTO = new MediaDTO();
@@ -45,21 +52,44 @@ public class MediaFileController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("media-get-resource/{id}")
-    public ResponseEntity<InputStreamResource> getMediaResource(@PathVariable String id) throws IOException {
-        return mediaFileService.getMediaResource(id);
+    /**
+     * retrieve file by file path
+     *
+     * @param mediaPath
+     */
+    @GetMapping("media-get-resource/{mediaPath}")
+    public ResponseEntity<InputStreamResource> getMediaResource(@PathVariable String mediaPath) throws IOException {
+        InputStreamResource image = mediaFileService.getMediaResource(mediaPath);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(MediaType.IMAGE_PNG_VALUE))
+                .body(image);
     }
 
-    @GetMapping("media-get-url/{id}")
-    public ResponseEntity<byte[]> getMediaURL(@PathVariable String id) {
-        return mediaFileService.getMediaFromUrl(id);
+    /**
+     * retrieve file by file path
+     *
+     * @param mediaPath
+     */
+    @GetMapping("media-get-url/{mediaPath}")
+    public ResponseEntity<byte[]> getMediaURL(@PathVariable String mediaPath) {
+        byte[] image = mediaFileService.getMediaFromUrl(mediaPath);
+        return ResponseEntity.ok()
+                .contentLength(image.length)
+                .contentType(MediaType.parseMediaType(MediaType.IMAGE_PNG_VALUE))
+                .body(image);
     }
 
+    /**
+     * retrieve file by file path and return encoded base64 image
+     *
+     * @param mediaPath
+     */
     @GetMapping("media-get-base64/{id}")
-    public ResponseEntity<String> getMediaEncodedBase64(@PathVariable String id) {
-        String data = mediaFileService.getMediaEncodedBase64(id);
+    public ResponseEntity<String> getMediaEncodedBase64(@PathVariable String mediaPath) {
+        String data = mediaFileService.getMediaEncodedBase64(mediaPath);
         return ResponseEntity.ok().body(data);
     }
+
 
     @PostMapping("upload-user-media/{id}")
     public ResponseEntity<MediaDTO> uploadUserMedia(@RequestParam("file") MultipartFile file,
