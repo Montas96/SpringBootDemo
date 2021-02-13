@@ -1,4 +1,4 @@
-package com.umbrella.demoSpringBoot.Service;
+package com.umbrella.demoSpringBoot.Service.MediaFile;
 
 import com.umbrella.demoSpringBoot.Domain.Media;
 import com.umbrella.demoSpringBoot.Service.dto.MediaDTO;

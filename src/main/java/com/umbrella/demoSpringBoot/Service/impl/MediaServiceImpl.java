@@ -1,12 +1,11 @@
 package com.umbrella.demoSpringBoot.Service.impl;
 
-import com.umbrella.demoSpringBoot.Domain.Media;
 import com.umbrella.demoSpringBoot.Domain.MediaType;
 import com.umbrella.demoSpringBoot.Domain.User;
 import com.umbrella.demoSpringBoot.Repository.MediaRepository;
 import com.umbrella.demoSpringBoot.Repository.MediaTypeRepository;
 import com.umbrella.demoSpringBoot.Repository.UserRepository;
-import com.umbrella.demoSpringBoot.Service.MediaFileService;
+import com.umbrella.demoSpringBoot.Service.MediaFile.MediaFileService;
 import com.umbrella.demoSpringBoot.Service.MediaService;
 import com.umbrella.demoSpringBoot.Service.dto.MediaDTO;
 import com.umbrella.demoSpringBoot.Service.mapper.MediaMapper;

@@ -1,6 +1,6 @@
-package com.umbrella.demoSpringBoot.Controller;
+package com.umbrella.demoSpringBoot.Controller.MediaFile;
 
-import com.umbrella.demoSpringBoot.Service.MediaFileService;
+import com.umbrella.demoSpringBoot.Service.MediaFile.MediaFileService;
 import com.umbrella.demoSpringBoot.Service.MediaService;
 import com.umbrella.demoSpringBoot.Service.dto.MediaDTO;
 import org.springframework.core.io.InputStreamResource;
